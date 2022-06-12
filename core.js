@@ -59,7 +59,7 @@ function drawSecondaryTable(arr) {
   arr.forEach((data, i) => {
     content += `<div data-value='${converObjectToString(
       data
-    )}' onmouseover="mouseOverElement(this)" style='${
+    )}' onClick='drawModal(this)' onmouseover="mouseOverElement(this)" style='${
       data.style
         ? `${data.style} background-color : ${pickColor(data.groupBlock)}`
         : `background-color : ${pickColor(data.groupBlock)}`
