@@ -1,0 +1,206 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background-color: #1b2430;
+}
+
+#convertToPDF {
+  position: absolute;
+  top: 0px;
+  right: 10%;
+  padding: 14px;
+}
+
+#root {
+  background-color: #1b2430;
+}
+
+.mainTable {
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(18, minmax(4rem, 1fr));
+  grid-template-rows: repeat(7, minmax(5rem, 1fr));
+  grid-auto-flow: column;
+  gap: 2px;
+  color: white;
+}
+
+.secondaryTable {
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(18, minmax(4rem, 1fr));
+  grid-template-rows: repeat(2, minmax(4rem, 1fr));
+  gap: 2px;
+  color: white;
+}
+
+.mainTable > div {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  font-size: 0.75em;
+}
+
+.mainTable #elementView {
+  background-color: white;
+  color: black;
+  grid-area: 1 / 5 / span 2 / span 2;
+}
+
+.secondaryTable > div {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  font-size: 0.75em;
+}
+
+.classElements {
+  position: absolute;
+  top: -15px;
+  width: 100%;
+  text-align: center;
+  font-size: 1em;
+}
+
+.mainTable > div:hover {
+  box-shadow: 6px 6px 20px rgb(0 0 0 / 80%);
+  transform: translateY(-2.45rem);
+}
+
+.secondaryTable > div:hover {
+  box-shadow: 6px 6px 20px rgb(0 0 0 / 80%);
+  transform: translateY(-2.45rem);
+}
+
+.element .atomicNumber {
+  text-align: center;
+  /* background-color: #354259; */
+  width: 100%;
+}
+
+.element .info {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.element .info .symbol {
+  margin: 2px;
+  font-size: 2.2em;
+  font-weight: 700;
+}
+
+#elementView {
+  font-size: 0.9em;
+  overflow: visible;
+  transition: all 0.5s ease-in-out;
+}
+
+#elementView.scrolled {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  width: 9.5rem;
+  height: 9.5rem;
+}
+
+#elementView.scrolled h5 {
+  display: none;
+}
+
+#elementView div {
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#elementView .info {
+  flex-direction: column;
+  text-align: center;
+  margin-top: 15px;
+}
+
+#elementView .info .oxidationStates {
+  font-size: 0.8em;
+}
+
+#elementView .info .main-info {
+  margin-top: 5px;
+}
+
+#elementView .info .main-info div {
+  flex-direction: column;
+  width: 30%;
+}
+
+#elementView .info .main-info .symbol {
+  margin: 2px;
+  font-size: 4em;
+  margin: 0px 10px;
+  font-weight: 700;
+}
+
+.legends {
+  display: flex;
+  align-items: flex-start;
+}
+
+.legends span div {
+  margin-right: 5px;
+  width: 15px;
+  height: 15px;
+}
+
+.legends span {
+  display: flex;
+  margin: 4px;
+}
+
+#modal {
+  z-index: 99;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  padding: 30px;
+}
+
+#modal .info-wrap {
+  background-color: #354259;
+  text-transform: capitalize;
+  padding: 20px;
+  width: 60%;
+  color: white;
+}
+
+#modal .image-wrap {
+  width: 35%;
+  height: 100%;
+}
+
+#modal #closeModal {
+  position: absolute;
+  top: 10px;
+  right: 70px;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: white;
+}
