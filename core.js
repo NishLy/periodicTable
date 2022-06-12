@@ -144,22 +144,22 @@ function drawMainTable(arr) {
 function drawHoveredElement(obj) {
   return `
   <div >
-  <span class.atomNumber>${obj.atomicNumber}<h5 style="position: absolute; top: 0; left: -70%; color: white;">Nomor Atom &rarr;</h5> </span>
-  <span class="atomicMass">${obj.atomicMass}<h5 style="position: absolute; top: 0; right: -70%; color: white;"> &larr; Massa Atom</h5> </span>
+  <span class.atomNumber>${obj.atomicNumber}<h5 style="position: absolute; top: 0; left: -15ch; color: white;">Nomor Atom &rarr;</h5> </span>
+  <span class="atomicMass">${obj.atomicMass}<h5 style="position: absolute; top: 0; right: -15ch; color: white;"> &larr; Massa Atom</h5> </span>
   </div> 
   <div class="info">
-   <span class="oxidationStates">${obj.oxidationStates}<h5 style="position: absolute; top:  20%; right: -70%; color: white;"> &larr; Tingkat oksidasi</h5> </span>
+   <span class="oxidationStates">${obj.oxidationStates}<h5 style="position: absolute; top:  0; right: -19ch; color: white;"> &larr; Tingkat oksidasi</h5> </span>
     <div class="main-info">
       <div>
-      <span class="boilingPoint">${obj.boilingPoint}<h5 style="position: absolute; top: 30%;left: -70%; color: white;">Titik didih (C) &rarr;</h5> </span></span>
-      <span class="meltingPoint">${obj.meltingPoint}<h5 style="position: absolute; top: 45%; left: -70%; color: white;">Titik leleh (C) &rarr;</h5> </span></span>
-      <span class="density">${obj.density}<h5 style="position: absolute; top: 60%; left: -70%; color: white;">Massa Jenis  &rarr;</h5> </span></span>
+      <span class="boilingPoint">${obj.boilingPoint}<h5 style="position: absolute; top: 0;left: -15ch; color: white;">Titik didih (C) &rarr;</h5> </span></span>
+      <span class="meltingPoint">${obj.meltingPoint}<h5 style="position: absolute; top: 0; left: -15ch; color: white;">Titik leleh (C) &rarr;</h5> </span></span>
+      <span class="density">${obj.density}<h5 style="position: absolute; top: 0; left: -15ch; color: white;">Massa Jenis  &rarr;</h5> </span></span>
       </div>
       <span class="symbol">${obj.symbol}</span>
-      <h5  style="font-size: 0.9em; position: absolute; top: 45%; right: -55%; color: white;">&larr; Symbol</h5>
+      <h5  style="font-size: 0.9em; position: absolute; top: 50%; right: -11ch; color: white;">&larr; Symbol</h5>
     </div>
-     <span class="electronConfiguration">${obj.electronicConfiguration}<h5 style="position: absolute; top: 70%; right: -85%; color: white;"> &larr; Struktur elektron</h5> </span>
-  <span class="name">${obj.name}<h5 style="position: absolute; top: 80%; right: -70%; color: white;"> &larr; Nama unsur;</h5></span>
+     <span class="electronConfiguration">${obj.electronicConfiguration}<h5 style="position: absolute; top: 0; right: -19ch; color: white;"> &larr; Struktur elektron</h5> </span>
+  <span class="name">${obj.name}<h5 style="position: absolute; top: 0; right: -15ch; color: white;"> &larr; Nama unsur;</h5></span>
   </div>
     `;
 }
@@ -208,7 +208,7 @@ function convertToPDF(element) {
     const doc = new jsPDF({
       orientation: "l",
       unit: "px",
-      format: [3150, 2000],
+      format: [3150, 2160],
     });
     doc.setFillColor(27, 36, 48);
     doc.rect(0, 0, 3150, 2160, "F");
@@ -219,7 +219,7 @@ function convertToPDF(element) {
     doc.addImage(img, "PNG", 40, 150);
     doc.setFontSize(40);
     doc.setFont("arial", "normal", 400);
-    doc.text("Created by @nishly", 80, 1970);
+    doc.text("Created by @nishly", 80, 2140);
     doc.save("Table_Periodik_by_@nishly.pdf");
     element.innerText = "SAVE AS PDF";
   });
@@ -230,7 +230,7 @@ function mouseOverElement(element) {
   const data = JSON.parse(element.getAttribute("data-value"));
   const parsed = drawHoveredElement(data);
   container.style.backgroundColor = `${element.style.backgroundColor}`;
-  container.style.display = "block";
+  container.style.display = "flex";
   container.innerHTML = parsed;
 }
 

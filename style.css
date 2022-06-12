@@ -11,7 +11,7 @@ body {
 #convertToPDF {
   position: absolute;
   top: 0px;
-  right: 10%;
+  right: 10rem;
   padding: 14px;
 }
 
@@ -20,6 +20,7 @@ body {
 }
 
 .mainTable {
+  height: calc(100vh - 40px);
   margin: 0 auto;
   padding: 20px;
   display: grid;
@@ -56,7 +57,7 @@ body {
   -webkit-box-pack: start;
   -ms-flex-pack: start;
   justify-content: flex-start;
-  font-size: 0.7em;
+  font-size: 0.75rem;
 }
 
 .mainTable #elementView {
@@ -82,7 +83,7 @@ body {
   -webkit-box-pack: start;
   -ms-flex-pack: start;
   justify-content: flex-start;
-  font-size: 0.7em;
+  font-size: 0.75rem;
 }
 
 .classElements {
@@ -128,12 +129,14 @@ body {
 
 .element .info .symbol {
   margin: 2px;
-  font-size: 2.2em;
+  font-size: 2.2rem;
   font-weight: 700;
 }
 
 #elementView {
-  font-size: 0.8em;
+  width: 9rem;
+  height: 10rem;
+  font-size: 0.8rem;
   overflow: visible;
   -webkit-transition: all 0.5s ease-in-out;
   -o-transition: all 0.5s ease-in-out;
@@ -144,12 +147,18 @@ body {
   position: fixed;
   left: 20px;
   bottom: 20px;
-  width: 9.5rem;
-  height: 9.5rem;
+}
+
+#elementView h5 {
+  font-size: 0.75rem;
 }
 
 #elementView.scrolled h5 {
   display: none;
+}
+
+#elementView span {
+  position: relative;
 }
 
 #elementView div {
@@ -169,11 +178,12 @@ body {
   -ms-flex-direction: column;
   flex-direction: column;
   text-align: center;
-  margin-top: 15px;
+  margin-top: auto;
+  margin-bottom: 1rem;
 }
 
 #elementView .info .oxidationStates {
-  font-size: 0.75em;
+  font-size: 0.75rem;
 }
 
 #elementView .info .main-info {
