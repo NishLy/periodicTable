@@ -57,7 +57,7 @@ body {
   -webkit-box-pack: start;
   -ms-flex-pack: start;
   justify-content: flex-start;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
 }
 
 .mainTable #elementView {
@@ -83,7 +83,7 @@ body {
   -webkit-box-pack: start;
   -ms-flex-pack: start;
   justify-content: flex-start;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
 }
 
 .classElements {
@@ -128,7 +128,6 @@ body {
 }
 
 .element .info .symbol {
-  margin: 2px;
   font-size: 2.2rem;
   font-weight: 700;
 }
@@ -150,7 +149,7 @@ body {
 }
 
 #elementView h5 {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
 }
 
 #elementView.scrolled h5 {
