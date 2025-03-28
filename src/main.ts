@@ -324,7 +324,9 @@ function drawModal(element: HTMLDivElement) {
 function closeModal() {
   const modal = document.querySelector("#modal") as HTMLDivElement;
   const root = document.querySelector("#root") as HTMLDivElement;
+
   if (!modal || !root) return;
+
   modal.style.display = "none";
   root.style.filter = "none";
   document.body.style.overflow = "auto";
@@ -393,6 +395,7 @@ async function get() {
 
   try {
     const res = await fetch("./db.json");
+
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status}`);
     }
@@ -404,6 +407,10 @@ async function get() {
 
     drawMainTable(data.mainTable);
     drawSecondaryTable(data.secondaryTable);
+
+    document
+      .querySelector("#closeModal")
+      ?.addEventListener("click", closeModal);
   } catch (error) {
     console.error("Failed to load periodic table data:", error);
     // You might want to show an error message to the user here

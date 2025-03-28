@@ -16,7 +16,6 @@ interface AtomicElement {
   meltingPoint: number;
   boilingPoint: number;
   density: number;
-  groupBlock: string;
   yearDiscovered: number;
   block: string;
   cpkHexColor: string;

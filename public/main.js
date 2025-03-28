@@ -195,6 +195,15 @@ function drawModal(element) {
   }
   info.innerHTML = content;
 }
+function closeModal() {
+  const modal = document.querySelector("#modal");
+  const root = document.querySelector("#root");
+  if (!modal || !root)
+    return;
+  modal.style.display = "none";
+  root.style.filter = "none";
+  document.body.style.overflow = "auto";
+}
 document.body.addEventListener("scroll", () => {
   const mainTable = document.querySelector("#mainTable");
   const container = document.querySelector("#elementView");
@@ -221,6 +230,7 @@ async function get() {
     const data = await res.json();
     drawMainTable(data.mainTable);
     drawSecondaryTable(data.secondaryTable);
+    document.querySelector("#closeModal")?.addEventListener("click", closeModal);
   } catch (error) {
     console.error("Failed to load periodic table data:", error);
   }
