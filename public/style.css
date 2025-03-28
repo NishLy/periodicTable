@@ -241,7 +241,7 @@ body {
   height: fit-content;
   top: 20px;
   left: 0;
-  width: 40vw;
+  width: 35vw;
   padding: 30px;
   flex-direction: column;
   justify-content: center;
@@ -272,10 +272,10 @@ body {
 #modal #closeModal {
   position: absolute;
   top: 10px;
-  right: 70px;
+  right: 10px;
   border: none;
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background-color: white;
 }
