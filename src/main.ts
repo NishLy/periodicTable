@@ -178,6 +178,9 @@ function drawHoveredElement(element: AtomicElement) {
 
 function drawModal(element: AtomicElement) {
   const info = document.querySelector(".info-wrap") as HTMLDivElement;
+  const elementHeader = document.querySelector(
+    ".element-header"
+  ) as HTMLDivElement;
   const modal = document.querySelector("#modal") as HTMLDivElement;
   const root = document.querySelector("#root") as HTMLDivElement;
 
@@ -200,9 +203,13 @@ function drawModal(element: AtomicElement) {
   let content = "";
 
   for (const key in element) {
-    content += `<h5>${key} : ${element[key]}</h5>`;
+    content += `<h5>${key.split(/(?=[A-Z])/).join(" ")} : ${element[key]}</h5>`;
   }
 
+  elementHeader.innerHTML = `
+  <h1>${element.symbol}</h1>
+  <h2>${element.name}</h2>
+  `;
   info.innerHTML = content;
   viewer.createAtom(element);
   // viewer.animate();

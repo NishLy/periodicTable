@@ -24601,6 +24601,7 @@ function drawMainTable(arr) {
 }
 function drawModal(element) {
   const info = document.querySelector(".info-wrap");
+  const elementHeader = document.querySelector(".element-header");
   const modal = document.querySelector("#modal");
   const root = document.querySelector("#root");
   if (!modal || !info || !root)
@@ -24617,8 +24618,12 @@ function drawModal(element) {
   }
   let content = "";
   for (const key in element) {
-    content += `<h5>${key} : ${element[key]}</h5>`;
+    content += `<h5>${key.split(/(?=[A-Z])/).join(" ")} : ${element[key]}</h5>`;
   }
+  elementHeader.innerHTML = `
+  <h1>${element.symbol}</h1>
+  <h2>${element.name}</h2>
+  `;
   info.innerHTML = content;
   viewer.createAtom(element);
 }
