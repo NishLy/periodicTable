@@ -27,7 +27,7 @@ body {
   grid-template-columns: repeat(18, minmax(4rem, 1fr));
   grid-template-rows: repeat(7, minmax(4.5rem, 1fr));
   grid-auto-flow: column;
-  gap: 2px;
+  gap: 5px;
   color: white;
 }
 
@@ -110,6 +110,11 @@ body {
   transform: translateY(-2.45rem);
 }
 
+.element {
+  padding: 10px;
+  border-radius: 5px;
+}
+
 .element .atomicNumber {
   text-align: center;
   /* background-color: #354259; */
@@ -133,8 +138,11 @@ body {
 }
 
 #elementView {
-  width: 9rem;
-  height: 10rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15rem;
+  height: 15rem;
   font-size: 0.8rem;
   overflow: visible;
   -webkit-transition: all 0.5s ease-in-out;

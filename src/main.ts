@@ -182,119 +182,7 @@ function drawMainTable(arr: AtomicElement[][]) {
 function drawHoveredElement(element: AtomicElement) {
   const container = document.createElement("div");
 
-  // Top section with atomic number and mass
-  const topDiv = document.createElement("div");
-
-  const atomNumberSpan = createLabeledSpan(
-    element.atomicNumber.toString(),
-    "atomNumber",
-    "Nomor Atom →",
-    "left"
-  );
-
-  const atomicMassSpan = createLabeledSpan(
-    element.atomicMass?.toString() || "",
-    "atomicMass",
-    "← Massa Atom",
-    "right"
-  );
-
-  topDiv.append(atomNumberSpan, atomicMassSpan);
-
-  // Info section
-  const infoDiv = document.createElement("div");
-  infoDiv.className = "info";
-
-  const oxidationStatesSpan = createLabeledSpan(
-    element.oxidationStates?.toString() || "",
-    "oxidationStates",
-    "← Tingkat oksidasi",
-    "right"
-  );
-
-  // Main info section
-  const mainInfoDiv = document.createElement("div");
-  mainInfoDiv.className = "main-info";
-
-  const propertiesDiv = document.createElement("div");
-  propertiesDiv.append(
-    createLabeledSpan(
-      element.boilingPoint?.toString() || "",
-      "boilingPoint",
-      "Titik didih (C) →",
-      "left"
-    ),
-    createLabeledSpan(
-      element.meltingPoint?.toString() || "",
-      "meltingPoint",
-      "Titik leleh (C) →",
-      "left"
-    ),
-    createLabeledSpan(
-      element.density?.toString() || "",
-      "density",
-      "Massa Jenis →",
-      "left"
-    )
-  );
-
-  const symbolSpan = createLabeledSpan(
-    element.symbol,
-    "symbol",
-    "← Symbol",
-    "right"
-  );
-
-  mainInfoDiv.append(propertiesDiv, symbolSpan);
-
-  const electronConfigSpan = createLabeledSpan(
-    element.electronicConfiguration || "",
-    "electronConfiguration",
-    "← Struktur elektron",
-    "right"
-  );
-
-  const nameSpan = createLabeledSpan(
-    element.name || "",
-    "name",
-    "← Nama unsur",
-    "right"
-  );
-
-  infoDiv.append(
-    oxidationStatesSpan,
-    mainInfoDiv,
-    electronConfigSpan,
-    nameSpan
-  );
-  container.append(topDiv, infoDiv);
-
   return container;
-}
-
-function createLabeledSpan(
-  text: string,
-  className: string,
-  labelText: string,
-  position: "left" | "right"
-): HTMLSpanElement {
-  const span = document.createElement("span");
-  span.className = className;
-  span.textContent = text;
-
-  const label = document.createElement("h5");
-  label.style.position = "absolute";
-  label.style.top = "0";
-  label.style.color = "white";
-  if (position === "left") {
-    label.style.left = "-15ch";
-  } else {
-    label.style.right = "-15ch";
-  }
-  label.textContent = labelText;
-
-  span.appendChild(label);
-  return span;
 }
 
 /*
@@ -324,7 +212,6 @@ function drawModal(element: HTMLDivElement) {
 function closeModal() {
   const modal = document.querySelector("#modal") as HTMLDivElement;
   const root = document.querySelector("#root") as HTMLDivElement;
-
   if (!modal || !root) return;
 
   modal.style.display = "none";
