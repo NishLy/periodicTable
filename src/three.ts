@@ -58,7 +58,7 @@ class AtomicViewer {
 
   setupScene() {
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x222222);
+    this.scene.background = new THREE.Color(0x354259);
 
     this.camera = new THREE.PerspectiveCamera(
       75,
@@ -244,7 +244,7 @@ class AtomicViewer {
       e.trailPositions.push(newPosition.clone());
 
       // Limit trail length
-      if (e.trailPositions.length > 100) {
+      if (e.trailPositions.length > 150) {
         e.trailPositions.shift();
       }
 

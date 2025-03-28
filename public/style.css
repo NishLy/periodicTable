@@ -23,6 +23,7 @@ body {
   height: calc(100vh - 40px);
   margin: 0 auto;
   padding: 20px;
+  padding-top: 30px;
   display: grid;
   grid-template-columns: repeat(18, minmax(4rem, 1fr));
   grid-template-rows: repeat(7, minmax(4.5rem, 1fr));
@@ -35,9 +36,10 @@ body {
   margin: 0 auto;
   padding: 20px;
   display: grid;
+  height: 15rem;
   grid-template-columns: repeat(18, minmax(4rem, 1fr));
   grid-template-rows: repeat(2, minmax(4.5rem, 1fr));
-  gap: 2px;
+  gap: 5px;
   color: white;
 }
 
@@ -56,7 +58,6 @@ body {
   flex-direction: column;
   -webkit-box-pack: start;
   -ms-flex-pack: start;
-  justify-content: flex-start;
   font-size: 0.7rem;
 }
 
@@ -113,6 +114,9 @@ body {
 .element {
   padding: 10px;
   border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .element .atomicNumber {

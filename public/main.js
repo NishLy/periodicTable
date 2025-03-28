@@ -24325,7 +24325,7 @@ class AtomicViewer {
   }
   setupScene() {
     this.scene = new Scene;
-    this.scene.background = new Color(2236962);
+    this.scene.background = new Color(3490393);
     this.camera = new PerspectiveCamera(75, this.container.clientWidth / this.container.clientHeight, 0.1, 1000);
     this.camera.position.set(0, 0, 15);
     this.renderer = new WebGLRenderer({ antialias: true });
@@ -24445,7 +24445,7 @@ class AtomicViewer {
       const newPosition = new Vector3(e.radius * Math.cos(e.angleX), e.radius * Math.sin(e.angleY), e.radius * Math.sin(e.angleX) * Math.cos(e.angleY));
       e.mesh.position.copy(newPosition);
       e.trailPositions.push(newPosition.clone());
-      if (e.trailPositions.length > 100) {
+      if (e.trailPositions.length > 150) {
         e.trailPositions.shift();
       }
       const trailGeometry = new BufferGeometry().setFromPoints(e.trailPositions);
