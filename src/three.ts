@@ -24,7 +24,6 @@ class AtomicViewer {
         this.controls.minDistance = 5;
         this.controls.maxDistance = 50;
 
-        // this.createAtom();
         // this.animate();
     }
 
