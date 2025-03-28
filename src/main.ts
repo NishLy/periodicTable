@@ -50,16 +50,10 @@ function converObjectToString(obj: AtomicElement) {
 }
 
 function mouseOverElement(element: HTMLDivElement) {
-  const container = document.querySelector("#elementView") as HTMLDivElement;
   const rawJson = element.getAttribute("data-value");
-  if (!container || !rawJson) return;
-
+  if (!rawJson) return;
   const data = JSON.parse(rawJson);
-  const parsed = drawHoveredElement(data);
-  container.style.backgroundColor = `${element.style.backgroundColor}`;
-  container.style.display = "flex";
-  container.innerHTML = "";
-  container.appendChild(parsed);
+  drawModal(data);
 }
 
 /*
@@ -83,7 +77,6 @@ function drawSecondaryTable(arr: AtomicElement[]) {
       ? `${data.style} background-color: ${pickColor(data.groupBlock)}`
       : `background-color: ${pickColor(data.groupBlock)}`;
     elementDiv.innerHTML = drawElement(data);
-    elementDiv.addEventListener("click", () => drawModal(elementDiv));
     elementDiv.addEventListener("mouseover", () =>
       mouseOverElement(elementDiv)
     );
@@ -130,7 +123,6 @@ function legendElements() {
 
 function drawMainTable(arr: AtomicElement[][]) {
   const container = document.querySelector("#root");
-  const elementView = document.createElement("div");
 
   const div = document.createElement("div");
   const legends = document.createElement("div");
@@ -141,8 +133,6 @@ function drawMainTable(arr: AtomicElement[][]) {
 
   legends.innerHTML = legendElements();
 
-  elementView.id = "elementView";
-  elementView.style.display = "none";
   div.className = "mainTable";
   div.id = "mainTable";
 
@@ -152,7 +142,6 @@ function drawMainTable(arr: AtomicElement[][]) {
     data.forEach((data, i) => {
       const elementDiv = document.createElement("div");
       elementDiv.setAttribute("data-value", converObjectToString(data));
-      elementDiv.addEventListener("click", () => drawModal(elementDiv));
       elementDiv.addEventListener("mouseover", () =>
         mouseOverElement(elementDiv)
       );
@@ -175,7 +164,6 @@ function drawMainTable(arr: AtomicElement[][]) {
 
   div.append(...contents);
   div.appendChild(legends);
-  div.appendChild(elementView);
   container?.appendChild(div);
 }
 
@@ -189,21 +177,30 @@ function drawHoveredElement(element: AtomicElement) {
   modal section
 */
 
-function drawModal(element: HTMLDivElement) {
-  const data = JSON.parse(element.getAttribute("data-value") as string);
+function drawModal(element: AtomicElement) {
   const info = document.querySelector(".info-wrap") as HTMLDivElement;
   const modal = document.querySelector("#modal") as HTMLDivElement;
   const root = document.querySelector("#root") as HTMLDivElement;
 
   if (!modal || !info || !root) return;
 
-  modal.style.display = "block";
-  root.style.filter = "blur(4px)";
-  document.body.style.overflow = "hidden";
+  modal.style.display = "flex";
+  // modal.style.backgroundColor = "#" + element.cpkHexColor + "90";
+
+  const mouseX = event?.clientX || 0;
+  const windowWidth = window.innerWidth;
+
+  if (mouseX > windowWidth / 2) {
+    modal.style.left = "20px";
+    modal.style.right = "auto";
+  } else {
+    modal.style.right = "20px";
+    modal.style.left = "auto";
+  }
 
   let content = "";
-  for (const key in data) {
-    content += `<h3>${key} : ${data[key]}</h3>`;
+  for (const key in element) {
+    content += `<h6>${key} : ${element[key]}</h6>`;
   }
 
   info.innerHTML = content;

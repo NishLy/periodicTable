@@ -42,16 +42,11 @@ function converObjectToString(obj) {
   return JSON.stringify(obj);
 }
 function mouseOverElement(element) {
-  const container = document.querySelector("#elementView");
   const rawJson = element.getAttribute("data-value");
-  if (!container || !rawJson)
+  if (!rawJson)
     return;
   const data = JSON.parse(rawJson);
-  const parsed = drawHoveredElement(data);
-  container.style.backgroundColor = `${element.style.backgroundColor}`;
-  container.style.display = "flex";
-  container.innerHTML = "";
-  container.appendChild(parsed);
+  drawModal(data);
 }
 function drawSecondaryTable(arr) {
   const container = document.querySelector("#root");
@@ -67,7 +62,6 @@ function drawSecondaryTable(arr) {
     elementDiv.setAttribute("data-value", converObjectToString(data));
     elementDiv.style.cssText = data.style ? `${data.style} background-color: ${pickColor(data.groupBlock)}` : `background-color: ${pickColor(data.groupBlock)}`;
     elementDiv.innerHTML = drawElement(data);
-    elementDiv.addEventListener("click", () => drawModal(elementDiv));
     elementDiv.addEventListener("mouseover", () => mouseOverElement(elementDiv));
     contents.push(elementDiv);
   });
@@ -106,15 +100,12 @@ function legendElements() {
 }
 function drawMainTable(arr) {
   const container = document.querySelector("#root");
-  const elementView = document.createElement("div");
   const div = document.createElement("div");
   const legends = document.createElement("div");
   legends.className = "legends";
   legends.style.gridArea = "1 / 9 / span 2 / span 3";
   legends.style.flexDirection = "row";
   legends.innerHTML = legendElements();
-  elementView.id = "elementView";
-  elementView.style.display = "none";
   div.className = "mainTable";
   div.id = "mainTable";
   let contents = [];
@@ -122,7 +113,6 @@ function drawMainTable(arr) {
     data.forEach((data2, i) => {
       const elementDiv = document.createElement("div");
       elementDiv.setAttribute("data-value", converObjectToString(data2));
-      elementDiv.addEventListener("click", () => drawModal(elementDiv));
       elementDiv.addEventListener("mouseover", () => mouseOverElement(elementDiv));
       elementDiv.className = "element";
       elementDiv.style.cssText = data2.style ? `${data2.style} background-color: ${pickColor(data2.groupBlock)}` : `background-color: ${pickColor(data2.groupBlock)}`;
@@ -138,26 +128,27 @@ function drawMainTable(arr) {
   });
   div.append(...contents);
   div.appendChild(legends);
-  div.appendChild(elementView);
   container?.appendChild(div);
 }
-function drawHoveredElement(element) {
-  const container = document.createElement("div");
-  return container;
-}
 function drawModal(element) {
-  const data = JSON.parse(element.getAttribute("data-value"));
   const info = document.querySelector(".info-wrap");
   const modal = document.querySelector("#modal");
   const root = document.querySelector("#root");
   if (!modal || !info || !root)
     return;
-  modal.style.display = "block";
-  root.style.filter = "blur(4px)";
-  document.body.style.overflow = "hidden";
+  modal.style.display = "flex";
+  const mouseX = event?.clientX || 0;
+  const windowWidth = window.innerWidth;
+  if (mouseX > windowWidth / 2) {
+    modal.style.left = "20px";
+    modal.style.right = "auto";
+  } else {
+    modal.style.right = "20px";
+    modal.style.left = "auto";
+  }
   let content = "";
-  for (const key in data) {
-    content += `<h3>${key} : ${data[key]}</h3>`;
+  for (const key in element) {
+    content += `<h6>${key} : ${element[key]}</h6>`;
   }
   info.innerHTML = content;
 }

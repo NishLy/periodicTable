@@ -24,6 +24,7 @@ interface AtomicElement {
   class: string;
   style: string;
   groupBlock: string;
+  [key: string]: any;
 }
 
 export default AtomicElement;
