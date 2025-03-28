@@ -24362,7 +24362,7 @@ class AtomicViewer {
       this.scene.remove(this.nucleusGroup);
     this.electrons.forEach((e) => {
       this.scene?.remove(e.mesh);
-      this.scene?.remove(e.orbitRing);
+      this.scene?.remove(e.trail);
     });
     this.electrons = [];
     this.nucleusGroup = new Group;
@@ -24395,45 +24395,40 @@ class AtomicViewer {
       emissive: 65535,
       emissiveIntensity: 2
     });
+    const ringMaterial = new MeshBasicMaterial({
+      color: 65535,
+      transparent: true,
+      opacity: 0.3,
+      side: DoubleSide
+    });
     for (let i = 0;i < protons; i++) {
       const radius = 3 + i % 3 * 1.5;
-      const angle = Math.random() * Math.PI * 2;
+      const angleX = Math.random() * Math.PI * 2;
+      const angleY = Math.random() * Math.PI * 2;
       const speed = 0.01 + Math.random() * 0.02;
-      const tiltAxis = new Vector3(Math.random(), Math.random(), Math.random()).normalize();
       const electronGeometry = new SphereGeometry(0.3, 16, 16);
       const electron = new Mesh(electronGeometry, electronMaterial);
       this.scene.add(electron);
-      const orbitRing = this.createOrbitRing(radius, tiltAxis);
-      this.scene.add(orbitRing);
+      const trailPositions = [];
+      const trailGeometry = new BufferGeometry;
+      const trailMaterial = new LineBasicMaterial({
+        color: 65535,
+        transparent: true,
+        opacity: 0.5,
+        blending: AdditiveBlending
+      });
+      const trail = new Line(trailGeometry, trailMaterial);
+      this.scene.add(trail);
       this.electrons.push({
         mesh: electron,
         radius,
-        angle,
+        angleX,
+        angleY,
         speed,
-        tiltAxis,
-        orbitRing
+        trail,
+        trailPositions
       });
     }
-  }
-  createOrbitRing(radius, tiltAxis) {
-    const ringSegments = 64;
-    const ringGeometry = new BufferGeometry;
-    const positions = [];
-    for (let i = 0;i <= ringSegments; i++) {
-      const theta = i / ringSegments * Math.PI * 2;
-      positions.push(radius * Math.cos(theta), radius * Math.sin(theta), 0);
-    }
-    ringGeometry.setAttribute("position", new Float32BufferAttribute(positions, 3));
-    const ringMaterial = new LineBasicMaterial({
-      color: 65535,
-      opacity: 0.5,
-      transparent: true
-    });
-    const orbitRing = new Line(ringGeometry, ringMaterial);
-    const orbitGroup = new Object3D;
-    orbitGroup.add(orbitRing);
-    orbitGroup.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-    return orbitGroup;
   }
   animate() {
     if (!this.renderer || !this.scene || !this.camera || !this.controls)
@@ -24445,10 +24440,26 @@ class AtomicViewer {
       this.nucleusGroup.rotation.x += 0.003;
     }
     this.electrons.forEach((e) => {
-      e.angle += e.speed;
-      e.mesh.position.set(e.radius * Math.cos(e.angle), e.radius * Math.sin(e.angle), 0);
-      e.mesh.position.applyAxisAngle(e.tiltAxis, Math.PI);
-      e.orbitRing.rotation.copy(e.mesh.rotation);
+      e.angleX += e.speed;
+      e.angleY += e.speed * 0.7;
+      const newPosition = new Vector3(e.radius * Math.cos(e.angleX), e.radius * Math.sin(e.angleY), e.radius * Math.sin(e.angleX) * Math.cos(e.angleY));
+      e.mesh.position.copy(newPosition);
+      e.trailPositions.push(newPosition.clone());
+      if (e.trailPositions.length > 100) {
+        e.trailPositions.shift();
+      }
+      const trailGeometry = new BufferGeometry().setFromPoints(e.trailPositions);
+      const positions = trailGeometry.getAttribute("position");
+      const colors = new Float32Array(e.trailPositions.length * 3);
+      e.trailPositions.forEach((pos, index) => {
+        const fadeValue = index / e.trailPositions.length;
+        colors[index * 3] = 0;
+        colors[index * 3 + 1] = 1;
+        colors[index * 3 + 2] = 1;
+        trailGeometry.setAttribute("color", new BufferAttribute(colors, 3));
+      });
+      e.trail.geometry.dispose();
+      e.trail.geometry = trailGeometry;
     });
     this.renderer.render(this.scene, this.camera);
   }
@@ -24520,7 +24531,7 @@ function drawSecondaryTable(arr) {
     elementDiv.setAttribute("data-value", converObjectToString(data));
     elementDiv.style.cssText = data.style ? `${data.style} background-color: ${pickColor(data.groupBlock)}` : `background-color: ${pickColor(data.groupBlock)}`;
     elementDiv.innerHTML = drawElement(data);
-    elementDiv.addEventListener("mouseover", () => mouseOverElement(elementDiv));
+    elementDiv.addEventListener("click", () => mouseOverElement(elementDiv));
     contents.push(elementDiv);
   });
   div.append(...contents);
@@ -24571,7 +24582,7 @@ function drawMainTable(arr) {
     data.forEach((data2, i) => {
       const elementDiv = document.createElement("div");
       elementDiv.setAttribute("data-value", converObjectToString(data2));
-      elementDiv.addEventListener("mouseover", () => mouseOverElement(elementDiv));
+      elementDiv.addEventListener("click", () => mouseOverElement(elementDiv));
       elementDiv.className = "element";
       elementDiv.style.cssText = data2.style ? `${data2.style} background-color: ${pickColor(data2.groupBlock)}` : `background-color: ${pickColor(data2.groupBlock)}`;
       elementDiv.innerHTML = drawElement(data2);

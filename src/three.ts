@@ -17,10 +17,12 @@ class AtomicViewer {
   private electrons: {
     mesh: THREE.Mesh;
     radius: number;
-    angle: number;
+    angleX: number;
+    angleY: number;
     speed: number;
-    tiltAxis: THREE.Vector3;
-    orbitRing: THREE.Object3D;
+    // orbitRing: THREE.Mesh;
+    trail: THREE.Line;
+    trailPositions: THREE.Vector3[];
   }[] = [];
 
   constructor(containerId: string, modalId: string) {
@@ -113,7 +115,8 @@ class AtomicViewer {
     if (this.nucleusGroup) this.scene.remove(this.nucleusGroup);
     this.electrons.forEach((e) => {
       this.scene?.remove(e.mesh);
-      this.scene?.remove(e.orbitRing);
+      //   this.scene?.remove(e.orbitRing);
+      this.scene?.remove(e.trail);
     });
     this.electrons = [];
 
@@ -162,65 +165,55 @@ class AtomicViewer {
       emissiveIntensity: 2,
     });
 
+    const ringMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00ffff,
+      transparent: true,
+      opacity: 0.3,
+      side: THREE.DoubleSide,
+    });
+
     for (let i = 0; i < protons; i++) {
       const radius = 3 + (i % 3) * 1.5;
-      const angle = Math.random() * Math.PI * 2;
+      const angleX = Math.random() * Math.PI * 2;
+      const angleY = Math.random() * Math.PI * 2;
       const speed = 0.01 + Math.random() * 0.02;
-      const tiltAxis = new THREE.Vector3(
-        Math.random(),
-        Math.random(),
-        Math.random()
-      ).normalize();
 
       const electronGeometry = new THREE.SphereGeometry(0.3, 16, 16);
       const electron = new THREE.Mesh(electronGeometry, electronMaterial);
       this.scene!.add(electron);
 
-      const orbitRing = this.createOrbitRing(radius, tiltAxis);
-      this.scene!.add(orbitRing);
+      // //   // Electron Orbit Ring (Tilting with Electron Motion)
+      // //   const ringGeometry = new THREE.RingGeometry(
+      // //     radius - 0.1,
+      // //     radius + 0.1,
+      // //     64
+      // //   );
+      //   const orbitRing = new THREE.Mesh(ringGeometry, ringMaterial);
+      //   this.scene!.add(orbitRing);
+
+      // Create electron trail
+      const trailPositions: THREE.Vector3[] = [];
+      const trailGeometry = new THREE.BufferGeometry();
+      const trailMaterial = new THREE.LineBasicMaterial({
+        color: 0x00ffff,
+        transparent: true,
+        opacity: 0.5,
+        blending: THREE.AdditiveBlending,
+      });
+      const trail = new THREE.Line(trailGeometry, trailMaterial);
+      this.scene!.add(trail);
 
       this.electrons.push({
         mesh: electron,
         radius,
-        angle,
+        angleX,
+        angleY,
         speed,
-        tiltAxis,
-        orbitRing,
+        // orbitRing,
+        trail,
+        trailPositions,
       });
     }
-  }
-
-  createOrbitRing(radius: number, tiltAxis: THREE.Vector3): THREE.Object3D {
-    const ringSegments = 64;
-    const ringGeometry = new THREE.BufferGeometry();
-    const positions = [];
-
-    for (let i = 0; i <= ringSegments; i++) {
-      const theta = (i / ringSegments) * Math.PI * 2;
-      positions.push(radius * Math.cos(theta), radius * Math.sin(theta), 0);
-    }
-
-    ringGeometry.setAttribute(
-      "position",
-      new THREE.Float32BufferAttribute(positions, 3)
-    );
-
-    const ringMaterial = new THREE.LineBasicMaterial({
-      color: 0x00ffff,
-      opacity: 0.5,
-      transparent: true,
-    });
-    const orbitRing = new THREE.Line(ringGeometry, ringMaterial);
-
-    const orbitGroup = new THREE.Object3D();
-    orbitGroup.add(orbitRing);
-    orbitGroup.rotation.set(
-      Math.random() * Math.PI,
-      Math.random() * Math.PI,
-      Math.random() * Math.PI
-    );
-
-    return orbitGroup;
   }
 
   animate() {
@@ -235,14 +228,48 @@ class AtomicViewer {
     }
 
     this.electrons.forEach((e) => {
-      e.angle += e.speed;
-      e.mesh.position.set(
-        e.radius * Math.cos(e.angle),
-        e.radius * Math.sin(e.angle),
-        0
+      e.angleX += e.speed;
+      e.angleY += e.speed * 0.7;
+
+      const newPosition = new THREE.Vector3(
+        e.radius * Math.cos(e.angleX),
+        e.radius * Math.sin(e.angleY),
+        e.radius * Math.sin(e.angleX) * Math.cos(e.angleY)
       );
-      e.mesh.position.applyAxisAngle(e.tiltAxis, Math.PI);
-      e.orbitRing.rotation.copy(e.mesh.rotation);
+
+      // Update electron position
+      e.mesh.position.copy(newPosition);
+
+      // Update trail
+      e.trailPositions.push(newPosition.clone());
+
+      // Limit trail length
+      if (e.trailPositions.length > 100) {
+        e.trailPositions.shift();
+      }
+
+      // Update trail geometry
+      const trailGeometry = new THREE.BufferGeometry().setFromPoints(
+        e.trailPositions
+      );
+
+      // Fade out trail points
+      const positions = trailGeometry.getAttribute("position");
+      const colors = new Float32Array(e.trailPositions.length * 3);
+
+      e.trailPositions.forEach((pos, index) => {
+        const fadeValue = index / e.trailPositions.length;
+        colors[index * 3] = 0; // R
+        colors[index * 3 + 1] = 1; // G
+        colors[index * 3 + 2] = 1; // B
+        trailGeometry.setAttribute(
+          "color",
+          new THREE.BufferAttribute(colors, 3)
+        );
+      });
+
+      e.trail.geometry.dispose();
+      e.trail.geometry = trailGeometry;
     });
 
     this.renderer.render(this.scene, this.camera);

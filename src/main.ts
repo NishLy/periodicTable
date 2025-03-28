@@ -80,9 +80,7 @@ function drawSecondaryTable(arr: AtomicElement[]) {
       ? `${data.style} background-color: ${pickColor(data.groupBlock)}`
       : `background-color: ${pickColor(data.groupBlock)}`;
     elementDiv.innerHTML = drawElement(data);
-    elementDiv.addEventListener("mouseover", () =>
-      mouseOverElement(elementDiv)
-    );
+    elementDiv.addEventListener("click", () => mouseOverElement(elementDiv));
     contents.push(elementDiv);
   });
 
@@ -145,9 +143,7 @@ function drawMainTable(arr: AtomicElement[][]) {
     data.forEach((data, i) => {
       const elementDiv = document.createElement("div");
       elementDiv.setAttribute("data-value", converObjectToString(data));
-      elementDiv.addEventListener("mouseover", () =>
-        mouseOverElement(elementDiv)
-      );
+      elementDiv.addEventListener("click", () => mouseOverElement(elementDiv));
       elementDiv.className = "element";
       elementDiv.style.cssText = data.style
         ? `${data.style} background-color: ${pickColor(data.groupBlock)}`
