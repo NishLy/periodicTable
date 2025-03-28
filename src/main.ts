@@ -1,8 +1,11 @@
+import AtomicViewer from "./three";
+import type AtomicElement from "./data";
+
+const viewer = new AtomicViewer("model-view", "modal");
+
 /*
   utils section
 */
-
-import type AtomicElement from "./data";
 
 function pickColor(group: string) {
   let bgColor = "";
@@ -187,7 +190,7 @@ function drawModal(element: AtomicElement) {
   modal.style.display = "flex";
   // modal.style.backgroundColor = "#" + element.cpkHexColor + "90";
 
-  const mouseX = event?.clientX || 0;
+  const mouseX = (event as MouseEvent)?.clientX || 0;
   const windowWidth = window.innerWidth;
 
   if (mouseX > windowWidth / 2) {
@@ -199,11 +202,14 @@ function drawModal(element: AtomicElement) {
   }
 
   let content = "";
+
   for (const key in element) {
-    content += `<h6>${key} : ${element[key]}</h6>`;
+    content += `<h5>${key} : ${element[key]}</h5>`;
   }
 
   info.innerHTML = content;
+  viewer.createAtom(element);
+  // viewer.animate();
 }
 
 function closeModal() {
